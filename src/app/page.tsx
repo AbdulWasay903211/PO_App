@@ -1,17 +1,19 @@
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-br from-gray-900 via-gray-800 to-gray-700 text-white p-6">
-      <div className="text-center space-y-4 animate-fade-in">
-        <h1 className="text-5xl font-extrabold tracking-tight">SE Project</h1>
-        <p className="text-xl text-gray-300">Pay Order Management App</p>
-        <div className="mt-6">
-          <a
-            href="#"
-            className="px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 transition font-medium shadow-lg"
-          >
-            Get Started
-          </a>
-        </div>
+    <main className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-blue-50 to-blue-100 text-center p-6">
+      <div className="max-w-2xl bg-white shadow-lg rounded-2xl p-10 border border-blue-200">
+        <h1 className="text-5xl font-extrabold text-blue-700 mb-3">
+          SE Project
+        </h1>
+        <h2 className="text-2xl font-semibold text-gray-700 mb-4">
+          Pay Order Management App
+        </h2>
+        <p className="text-gray-600 text-lg leading-relaxed">
+          This project is designed to streamline the creation, tracking, and
+          management of pay orders within an organization. It focuses on
+          improving efficiency, transparency, and record-keeping for all
+          financial transactions.
+        </p>
       </div>
     </main>
   );

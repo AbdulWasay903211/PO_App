@@ -1,3 +1,6 @@
+@import "tailwindcss";
+
+/* Your custom animation (keep this here) */
 @keyframes fade-in {
   from {
     opacity: 0;
