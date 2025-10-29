@@ -9,10 +9,7 @@ export default function Home() {
           Pay Order Management App
         </h2>
         <p className="text-gray-600 text-lg leading-relaxed">
-          This project is designed to streamline the creation, tracking, and
-          management of pay orders within an organization. It focuses on
-          improving efficiency, transparency, and record-keeping for all
-          financial transactions.
+          This website is taken over by Aqsa now
         </p>
       </div>
     </main>
