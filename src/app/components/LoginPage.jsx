@@ -7,9 +7,12 @@ const LoginPage = ({ onLoginSuccess }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    setLoading(true);
+    setError("");
 
     try {
       const res = await fetch('/api/login', {
@@ -21,25 +24,35 @@ const LoginPage = ({ onLoginSuccess }) => {
       const data = await res.json();
 
       if (res.ok) {
-        onLoginSuccess(data.user); // pass user info
+        const user = data.user;
+
+        // ✅ Store user info in sessionStorage
+        sessionStorage.setItem("user_type", user.user_type); // Important for dashboard/sidebar
+        sessionStorage.setItem("username", user.username);
+        sessionStorage.setItem("firstName", user.firstName);
+        sessionStorage.setItem("lastName", user.lastName);
+        sessionStorage.setItem("userId", user.id);
+
+        // ✅ Call the original onLoginSuccess callback
+        onLoginSuccess(user);
       } else {
         setError(data.error);
       }
     } catch (err) {
-      setError('Server error');
+      setError("Server error");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-blue-100 to-blue-300">
-      {/* Container with animation */}
       <motion.div
         initial={{ opacity: 0, y: 50, scale: 0.9 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
         transition={{ duration: 0.6, ease: "easeOut" }}
         className="bg-white/80 backdrop-blur-md rounded-2xl shadow-xl p-10 w-full max-w-md"
       >
-        {/* Logo animation */}
         <motion.h1
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -50,6 +63,7 @@ const LoginPage = ({ onLoginSuccess }) => {
         </motion.h1>
 
         <form onSubmit={handleLogin} className="space-y-5">
+          {/* Username */}
           <div>
             <label className="block text-gray-700 mb-2">Username</label>
             <motion.input
@@ -58,12 +72,14 @@ const LoginPage = ({ onLoginSuccess }) => {
               type="text"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              disabled={loading}
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
               placeholder="Enter your username"
               required
             />
           </div>
 
+          {/* Password */}
           <div>
             <label className="block text-gray-700 mb-2">Password</label>
             <motion.input
@@ -72,12 +88,14 @@ const LoginPage = ({ onLoginSuccess }) => {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              disabled={loading}
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
               placeholder="Enter your password"
               required
             />
           </div>
 
+          {/* Error */}
           {error && (
             <motion.p
               initial={{ opacity: 0 }}
@@ -88,14 +106,27 @@ const LoginPage = ({ onLoginSuccess }) => {
             </motion.p>
           )}
 
+          {/* Login Button */}
           <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
+            whileHover={!loading ? { scale: 1.05 } : {}}
+            whileTap={!loading ? { scale: 0.95 } : {}}
             transition={{ type: "spring", stiffness: 300 }}
             type="submit"
-            className="w-full bg-blue-600 text-white font-semibold py-2 rounded-lg shadow-md hover:bg-blue-700 transition"
+            disabled={loading}
+            className="w-full bg-blue-600 text-white font-semibold py-2 rounded-lg shadow-md hover:bg-blue-700 transition disabled:bg-blue-400 disabled:cursor-not-allowed flex items-center justify-center gap-2"
           >
-            Login
+            {loading ? (
+              <>
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"
+                />
+                Logging in...
+              </>
+            ) : (
+              "Login"
+            )}
           </motion.button>
         </form>
       </motion.div>

@@ -1,4 +1,6 @@
 import pool from '../../../app/db.js';
+import bcrypt from 'bcryptjs';
+import { NextResponse } from 'next/server';
 
 export async function POST(req) {
   const { username, password } = await req.json();
@@ -12,27 +14,33 @@ export async function POST(req) {
       [username]
     );
 
-    if (result.rows.length === 0 || result.rows[0].password_hash !== password) {
-      return new Response(JSON.stringify({ error: 'Invalid username or password' }), { status: 401 });
+    if (result.rows.length === 0) {
+      return NextResponse.json({ error: 'Invalid username or password' }, { status: 401 });
     }
 
     const user = result.rows[0];
 
-    return new Response(
-      JSON.stringify({
-        message: 'Login successful',
-        user: {
-          id: user.user_id,
-          firstName: user.first_name,
-          lastName: user.last_name,
-          type: user.user_type,
-          username,
-        },
-      }),
-      { status: 200 }
-    );
+    // 🔐 Compare password with bcrypt hash
+    const isMatch = await bcrypt.compare(password, user.password_hash);
+
+    if (!isMatch) {
+      return NextResponse.json({ error: 'Invalid username or password' }, { status: 401 });
+    }
+
+    // ✅ Login successful — include user_type
+    return NextResponse.json({
+      message: 'Login successful',
+      user: {
+        id: user.user_id,
+        firstName: user.first_name,
+        lastName: user.last_name,
+        username,
+        user_type: user.user_type, // <-- important for dashboard/sidebar
+      },
+    }, { status: 200 });
+
   } catch (err) {
     console.error('Login error:', err);
-    return new Response(JSON.stringify({ error: 'Server error' }), { status: 500 });
+    return NextResponse.json({ error: 'Server error' }, { status: 500 });
   }
 }
