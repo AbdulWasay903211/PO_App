@@ -17,12 +17,12 @@ const Sidebar = ({ onSelectPage, userType }) => {
         >
           Home
         </button>
-        <button
+        {/*<button
           onClick={() => onSelectPage("page2")}
           className="text-left mb-2 px-3 py-2 rounded-md hover:bg-gray-400 transition-colors"
         >
           Page 2
-        </button>
+        </button>*/}
 
         {/* ✅ Only render Account Manager if CEO or manager*/}
         {(userType === "CEO" || userType === "Manager") && (
