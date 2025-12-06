@@ -90,59 +90,58 @@ const AccountManager = () => {
         className="bg-white shadow-md rounded-xl overflow-hidden"
       >
         <table className="min-w-full text-left border-collapse">
-          <thead className="bg-gray-200 text-gray-700">
-            <tr>
-              <th className="p-3 w-10"></th>
-              <th className="p-3">Account ID</th>
-              <th className="p-3">User ID</th>
-              <th className="p-3">First Name</th>
-              <th className="p-3">Last Name</th>
-              <th className="p-3">Email</th>
-              <th className="p-3">Account Type</th>
+          <thead>
+            <tr className="bg-gray-100 text-left rounded-t-xl">
+              <th className="p-3 font-medium text-left">Account ID</th>
+              <th className="p-3 font-medium text-left">User ID</th>
+              <th className="p-3 font-medium text-left">First Name</th>
+              <th className="p-3 font-medium text-left">Last Name</th>
+              <th className="p-3 font-medium text-left">Email</th>
+              <th className="p-3 font-medium text-left">Account Type</th>
+              <th className="p-3 font-medium text-left">Actions</th>
             </tr>
           </thead>
 
           <tbody>
             {loading ? (
               <tr>
-                <td colSpan="7" className="text-center p-4 text-gray-500">
+                <td colSpan="7" className="p-6 text-center text-gray-500">
                   Loading accounts...
                 </td>
               </tr>
             ) : accounts.length > 0 ? (
               accounts.map((acc) => (
-                <motion.tr
+                <tr
                   key={acc.account_id}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  className="hover:bg-blue-50 transition"
+                  className="odd:bg-gray-50 hover:bg-gray-100 transition"
                 >
-                  {/* DELETE BUTTON */}
-                  <td className="p-3">
-                    <button
-                      onClick={() => handleDelete(acc)}
-                      className="text-red-500 hover:text-red-700 font-bold"
-                    >
-                      ✕
-                    </button>
-                  </td>
-
-                  <td className="p-3 font-semibold">{acc.account_id}</td>
+                  <td className="p-3 font-medium">{acc.account_id}</td>
                   <td className="p-3">{acc.user_id}</td>
                   <td className="p-3">{acc.first_name}</td>
                   <td className="p-3">{acc.last_name}</td>
                   <td className="p-3">{acc.email}</td>
                   <td className="p-3 font-medium text-blue-700">{acc.user_type}</td>
-                </motion.tr>
+                  
+                  {/* Actions Column */}
+                  <td className="p-3">
+                    <button
+                      onClick={() => handleDelete(acc)}
+                      className="text-red-600 hover:text-red-800"
+                    >
+                      Delete
+                    </button>
+                  </td>
+                </tr>
               ))
             ) : (
               <tr>
-                <td colSpan="7" className="text-center p-4 text-gray-500">
+                <td colSpan="7" className="p-6 text-center text-gray-500">
                   No accounts found
                 </td>
               </tr>
             )}
           </tbody>
+
         </table>
       </motion.div>
 

@@ -24,6 +24,15 @@ const Sidebar = ({ onSelectPage, userType }) => {
           Page 2
         </button>
 
+        {/* ✅ Only render Account Manager if CEO or manager*/}
+        {(userType === "CEO" || userType === "Manager") && (
+          <button
+            onClick={() => onSelectPage("inventoryManager")}
+            className="text-left mb-2 px-3 py-2 rounded-md hover:bg-gray-400 transition-colors"
+          >
+            Invenetory Manager
+          </button>
+        )}
         {/* ✅ Only render Account Manager if CEO */}
         {userType === "CEO" && (
           <button

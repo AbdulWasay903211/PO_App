@@ -8,6 +8,8 @@ import Topbar from "./Topbar";
 import HomePage from "../pages/HomePage";
 import Page2 from "../pages/Page2";
 import AccountManager from "../pages/AccountManager";
+import InventoryManager from "../pages/InventoryManager";
+
 
 const DashboardLayout = () => {
   const [currentPage, setCurrentPage] = useState("page1");
@@ -22,6 +24,9 @@ const DashboardLayout = () => {
       case "accountManager":
         // ✅ Only allow CEO to see this page
         return userType === "CEO" ? <AccountManager /> : <HomePage />;
+      case "inventoryManager":
+        // ✅ Only allow CEO or Manager to see this page
+        return (userType === "CEO" || userType == "Manager") ? <InventoryManager /> : <HomePage />;
       default:
         return <HomePage />;
     }
